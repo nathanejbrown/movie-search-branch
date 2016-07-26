@@ -1,12 +1,17 @@
 $('document').ready(function() {
+  var allGenres = [];
+  var allMovies = [];
   console.log('Sanity check');
   $('form').on('submit', function(event) {
     event.preventDefault();
     var movieTitle = $('#movieSearch').val().split(' ').join('+');
     findMovieWithTitle(movieTitle);
   });
-
-      var allGenres = [];
+  $('#genreOptions').on('change', function(event) {
+    event.preventDefault();
+    var selectedGenre = $('select').val();
+    displayOnlyCertainGenres(selectedGenre);
+  });
 
 
   $('#poster').on('click', 'div', function (event) {
@@ -21,7 +26,8 @@ $('document').ready(function() {
     $.ajax ({
       url: 'http://www.omdbapi.com/?t=' + movie
     }).done(function(movie) {
-      $('#poster').append('<div class="col-md-3 text-center" style="height:500px"><img src="' + movie.Poster + '"><p>' + movie.Title + '</p>');
+      allMovies.push(movie);
+      $('#poster').append('<div id="' + movie.imdbID + '" class="col-md-3 text-center" style="height:500px"><img src="' + movie.Poster + '"><p>' + movie.Title + '</p></div>');
       $('.well').css('visibility', 'visible');
       var genreArray = movie.Genre.split(', ');
       for (i = 0; i < genreArray.length; i++) {
@@ -41,5 +47,21 @@ $('document').ready(function() {
       return true;
     }
     return false;
+  }
+
+  function displayOnlyCertainGenres(genre) {
+    for (var i = 0; i < allMovies.length; i++) {
+      var genresOfEachMovie = allMovies[i].Genre.split(', ');
+        for (var x = 0; x < genresOfEachMovie.length; x++) {
+          if (genresOfEachMovie.indexOf(genre) === -1) {
+            var movieId = allMovies[i].imdbID;
+            $('#' + movieId).fadeOut(1000);
+          }
+          else {
+            var movieId = allMovies[i].imdbID;
+            $('#' + movieId).fadeIn(1000);
+          }
+        }
+    }
   }
 });
