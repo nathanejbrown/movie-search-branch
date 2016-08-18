@@ -7,10 +7,16 @@ $('document').ready(function() {
     var movieTitle = $('#movieSearch').val().split(' ').join('+');
     findMovieWithTitle(movieTitle);
   });
+
   $('#genreOptions').on('change', function(event) {
     event.preventDefault();
     var selectedGenre = $('select').val();
+    if (selectedGenre === 'All Genres') {
+      $('.movie').fadeIn(1000);
+    }
+    else {
     displayOnlyCertainGenres(selectedGenre);
+    }
   });
 
 
@@ -27,7 +33,7 @@ $('document').ready(function() {
       url: 'http://www.omdbapi.com/?t=' + movie
     }).done(function(movie) {
       allMovies.push(movie);
-      $('#poster').append('<div id="' + movie.imdbID + '" class="col-md-3 text-center" style="height:500px"><img src="' + movie.Poster + '"><p>' + movie.Title + '</p></div>');
+      $('#poster').append('<div id="' + movie.imdbID + '" class="col-md-3 text-center movie" style="height:500px"><img src="' + movie.Poster + '"><p>' + movie.Title + '</p></div>');
       $('.well').css('visibility', 'visible');
       var genreArray = movie.Genre.split(', ');
       for (i = 0; i < genreArray.length; i++) {
@@ -55,11 +61,11 @@ $('document').ready(function() {
         for (var x = 0; x < genresOfEachMovie.length; x++) {
           if (genresOfEachMovie.indexOf(genre) === -1) {
             var movieId = allMovies[i].imdbID;
-            $('#' + movieId).fadeOut(1000);
+            $('div#' + movieId).fadeOut(1000);
           }
           else {
             var movieId = allMovies[i].imdbID;
-            $('#' + movieId).fadeIn(1000);
+            $('div#' + movieId).fadeIn(1000);
           }
         }
     }
