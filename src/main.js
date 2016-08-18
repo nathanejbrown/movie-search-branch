@@ -30,7 +30,7 @@ $('document').ready(function() {
 
   function findMovieWithTitle(movie) {
     $.ajax ({
-      url: 'http://www.omdbapi.com/?t=' + movie
+      url: 'https://www.omdbapi.com/?t=' + movie
     }).done(function(movie) {
       allMovies.push(movie);
       $('#poster').append('<div id="' + movie.imdbID + '" class="col-md-3 text-center movie" style="height:500px"><img src="' + movie.Poster + '"><p>' + movie.Title + '</p></div>');
@@ -42,7 +42,7 @@ $('document').ready(function() {
             allGenres.push(genreArray[i]);
           }
         }
-    }).catch(function(error) {
+    }).fail(function(error) {
       console.log(error);
     });
   }
